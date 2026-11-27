@@ -408,6 +408,20 @@ int main( int argc, const char ** argv )
 	}
 
 	{
+		// Issue 1101: re-inserting the node already immediately after
+		// afterThis, when it is also the last child, must not crash.
+		XMLDocument doc;
+		XMLElement* element1 = doc.NewElement("Element1");
+		XMLElement* element2 = doc.NewElement("Element2");
+		doc.InsertEndChild(element1);
+		doc.InsertEndChild(element2);
+		XMLNode* result = doc.InsertAfterChild(element1, element2);
+		XMLTest( "Issue 1101: adjacent last re-insert returns addThis", true, result == element2 );
+		XMLTest( "Issue 1101: adjacent last re-insert keeps last child", true, doc.LastChild() == element2 );
+		XMLTest( "Issue 1101: adjacent last re-insert keeps order", true, element1->NextSibling() == element2 && element2->PreviousSibling() == element1 );
+	}
+
+	{
 		XMLDocument doc;
 		XMLElement* element1 = doc.NewElement("Element1");
 		XMLElement* element2 = doc.NewElement("Element2");

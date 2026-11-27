@@ -1011,11 +1011,11 @@ XMLNode* XMLNode::InsertAfterChild( XMLNode* afterThis, XMLNode* addThis )
         return addThis;
     }
 
+    InsertChildPreamble( addThis );
     if ( afterThis->_next == 0 ) {
         // The last node or the only node.
         return InsertEndChild( addThis );
     }
-    InsertChildPreamble( addThis );
     addThis->_prev = afterThis;
     addThis->_next = afterThis->_next;
     afterThis->_next->_prev = addThis;
